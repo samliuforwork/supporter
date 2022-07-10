@@ -1,0 +1,78 @@
+require: rubocop-rspec
+
+AllCops:
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  TargetRubyVersion: 2.7
+  NewCops: enable
+  Exclude:
+    - bin/*
+    - config/boot.rb
+    - config/environments/*
+    - config/initializers/version.rb
+    - config/puma.rb
+    - db/schema.rb
+    - db/migrate/*.rb
+    - tmp/**/*
+    - Gemfile
+
+Metrics/AbcSize:
+  Max: 60
+
+Metrics/ClassLength:
+  Max: 300
+  Exclude:
+
+Metrics/ModuleLength:
+  Max: 300
+
+Metrics/BlockNesting:
+  Exclude:
+
+Layout/LineLength:
+  Enabled: true
+  Max: 170
+  Exclude:
+
+Layout/ArgumentAlignment:
+  EnforcedStyle: 'with_fixed_indentation'
+
+Metrics/MethodLength:
+  Max: 48
+  Exclude:
+
+Metrics/BlockLength:
+  Exclude:
+
+Style/BarePercentLiterals:
+  EnforcedStyle: percent_q
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Layout/ExtraSpacing:
+  Exclude:
+
+Layout/SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: no_space
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
+Layout/ParameterAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Style/TrivialAccessors:
+  AllowPredicates: true
+
+Metrics/CyclomaticComplexity:
+  Max: 8
