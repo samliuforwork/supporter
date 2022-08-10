@@ -33,3 +33,5 @@ group :development do
   gem 'spring'
   gem 'web-console'
 end
+
+gem "line-bot-api", "~> 1.25"
