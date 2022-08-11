@@ -1,2 +1,4 @@
 development:
   :ptt: 'https://www.ptt.cc/bbs'
+production:
+  :ptt: 'https://www.ptt.cc/bbs'
