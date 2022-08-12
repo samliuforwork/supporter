@@ -19,10 +19,10 @@ doc = Nokogiri::HTML(URI.parse('https://www.ptt.cc/bbs/marvel/index.html').open)
 
 previous_page_index = doc.search('.btn-group-paging a').map { |node| node.values[1]&.delete('^0-9') }.compact.max
 
-doc.search('div .title').each_with_index |post, index|
-  title = post.text
-  author
-end
+# doc.search('div .title').each_with_index |post, index|
+#   title = post.text
+#   author
+# end
 # doc.search('div .title a').map(&:text)
 # doc.search('div .title a').map(&:values)
 # find the previous page index

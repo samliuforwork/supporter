@@ -22,10 +22,16 @@ gem 'tailwindcss-rails'
 gem 'turbo-rails'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem "nokogiri", "~> 1.13"
+gem "grape", "~> 1.6"
+gem "grape-swagger", "~> 1.5"
+gem "devise", "~> 4.8"
+gem "line-bot-api", "~> 1.25"
 
 group :development, :test do
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem "byebug", "~> 11.1"
+  gem "rspec-rails", "~> 5.1"
+  gem 'factory_bot_rails', '~> 6.2'
 end
 
 group :development do
@@ -34,4 +40,3 @@ group :development do
   gem 'web-console'
 end
 
-gem "line-bot-api", "~> 1.25"
