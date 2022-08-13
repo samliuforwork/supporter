@@ -1,4 +1,4 @@
 development:
-  :ptt: 'https://www.ptt.cc/bbs'
+  :ptt: 'https://www.ptt.cc'
 production:
-  :ptt: 'https://www.ptt.cc/bbs'
+  :ptt: 'https://www.ptt.cc'

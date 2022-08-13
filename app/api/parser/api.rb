@@ -28,7 +28,25 @@ module Parser
       route_param :query do
         resource :posts do
           get do
-            PostParser.new.posts(params)
+            PostParser.new.post_list(params)
+          end
+        end
+      end
+    end
+
+    resource :posts do
+      desc ''
+      params do
+        optional :no, type: Integer, values: 1..20, default: 1
+        optional :type, type: String
+        optional :query, type: String
+        optional :page, type: Integer
+        requires :board, type: String
+      end
+      route_param :no do
+        resource :images do
+          get do
+            PostParser.new.post_list(params)
           end
         end
       end

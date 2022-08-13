@@ -15,35 +15,47 @@ class PostParser
     response.read_body
   end
 
-  def posts(params)
+  def post_list(params)
     posts = []
+    pp 'params'
+    pp params
+    pp 'params'
+    pp doc_node(params)
     doc_node(params).search('.r-ent').each_with_object(posts) do |node, post|
       post << json(node)
     end
   end
 
+  def images(params)
+    doc_node(params).search('.r-ent')
+  end
+
   private
 
   def doc_node(params)
-    url = "#{ParseHost.ptt}/#{params[:board]}/search?page=#{params[:page]}&q=#{params[:type]}%3A#{params[:query]}"
-    Nokogiri::HTML(URI.parse(url).open)
+    url = "#{ParseHost.ptt}/bbs/#{params[:board]}/search?page=#{params[:page]}&q=#{params[:type]}%3A#{params[:query]}"
+    Nokogiri::HTML(URI.open(url, { 'Cookie' => 'over18=1' }))
   end
 
   def json(node)
+    url_with_host = ParseHost.ptt + node.search('.title a')[0].values[0]
+    search_title_with_host = ParseHost.ptt + node.search('.dropdown .item a')[0].values[0]
+    search_author_with_host = ParseHost.ptt + node.search('.dropdown .item a')[1].values[0]
+
     {
       date: node.search('.date').children.text,
       recommends: node.search('.nrec').children.text.to_i,
       title: node.search('.title a').children.text,
       author: node.search('.author').children.text,
-      url: node.search('.title a')[0].values[0],
-      search_title: node.search('.dropdown .item a')[0].values,
-      search_author: node.search('.dropdown .item a')[1].values
+      url: url_with_host,
+      search_title_url: search_title_with_host,
+      search_author_url: search_author_with_host
     }
   end
 
   def urls(node)
     node.search('div .title a').map do |url_path|
-      ParseHost.ptt.delete_suffix('/bbs') + url_path.values[0]
+      ParseHost.ptt + url_path.values[0]
     end
   end
 
