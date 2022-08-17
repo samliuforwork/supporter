@@ -35,18 +35,20 @@ module Parser
     end
 
     resource :posts do
-      desc ''
+      desc 'get '
       params do
-        optional :no, type: Integer, values: 1..20, default: 1
+        optional :rank, type: Integer, values: 0..19, default: 0
         optional :type, type: String
         optional :query, type: String
         optional :page, type: Integer
         requires :board, type: String
+        optional :random, type: Boolean
       end
-      route_param :no do
-        resource :images do
+      route_param :rank do
+        resource :media do
           get do
-            PostParser.new.post_list(params)
+            params[:rank] = rand(0..19) if params[:random] == true
+            PostParser.new.media(params)
           end
         end
       end

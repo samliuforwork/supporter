@@ -4,6 +4,7 @@ require 'uri'
 require 'net/http'
 
 class PostParser
+  PTT_COOKIE = { 'Cookie' => 'over18=1' }.freeze
   include ActionView::Helpers::SanitizeHelper
 
   def search(params)
@@ -16,25 +17,39 @@ class PostParser
   end
 
   def post_list(params)
-    posts = []
-    pp 'params'
-    pp params
-    pp 'params'
-    pp doc_node(params)
-    doc_node(params).search('.r-ent').each_with_object(posts) do |node, post|
+    doc_node(params).search('.r-ent').each_with_object([]) do |node, post|
       post << json(node)
     end
   end
 
-  def images(params)
-    doc_node(params).search('.r-ent')
+  def media(params)
+    url = post_list(params)[params[:rank]][:url]
+
+    nodes = nokogiri_open(url).search('#main-container')[0]
+    images = nodes.search('img').each_with_object([]) do |node, array|
+      array << node.values[0]
+    end
+    videos = nodes.search('iframe').each_with_object([]) do |node, array|
+      break if node.blank?
+
+      array << node.values[2].gsub('embed/', 'watch?v=').gsub('//www.', 'https://')
+    end
+
+    {
+      images: images,
+      videos: videos
+    }
   end
 
   private
 
   def doc_node(params)
     url = "#{ParseHost.ptt}/bbs/#{params[:board]}/search?page=#{params[:page]}&q=#{params[:type]}%3A#{params[:query]}"
-    Nokogiri::HTML(URI.open(url, { 'Cookie' => 'over18=1' }))
+    nokogiri_open(url)
+  end
+
+  def nokogiri_open(url)
+    Nokogiri::HTML(URI.open(url, PTT_COOKIE))
   end
 
   def json(node)
