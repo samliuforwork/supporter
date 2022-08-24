@@ -23,7 +23,7 @@ class PostParser
   end
 
   def media(params)
-    url = post_list(params)[params[:rank]][:url]
+    url = post_list(params)[params[:rank]].present? ? post_list(params)[params[:rank]][:url] : post_list(params)[0][:url]
 
     nodes = nokogiri_open(url).search('#main-container')[0]
     images = nodes.search('img').each_with_object([]) do |node, array|
@@ -74,11 +74,11 @@ class PostParser
     end
   end
 
-  # def last_page_value
-  #   return @last_page_value if @last_page_value.present?
-
-  #   url = "#{ParseHost.ptt}/#{board}/search?page=1&q=#{type}%3A#{query}"
-  #   doc = Nokogiri::HTML(URI.parse(url).open)
-  #   @last_page_value ||= doc.search('.btn-group-paging a').select { |node| node.children.text == '最舊' }[0].values[1][/\d+/].to_i
-  # end
+  # The page can be search is less than total page.
+  def last_page_value(params)
+    last_page_node = @last_page_value ||= doc_node(params).search('.btn-group-paging a').select do |node|
+      node.children.text == I18n.t('button.last_page')
+    end
+    last_page_node[0].values[1][/\d+/].to_i
+  end
 end

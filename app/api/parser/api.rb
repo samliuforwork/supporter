@@ -35,10 +35,10 @@ module Parser
     end
 
     resource :posts do
-      desc 'get '
+      desc 'get image and video url from ptt'
       params do
         optional :rank, type: Integer, values: 0..19, default: 0
-        optional :type, type: String
+        optional :type, type: String, values: %w[recommend author thread]
         optional :query, type: String
         optional :page, type: Integer
         requires :board, type: String
@@ -46,6 +46,26 @@ module Parser
       end
       route_param :rank do
         resource :media do
+          get do
+            params[:rank] = rand(0..19) if params[:random] == true
+            PostParser.new.media(params)
+          end
+        end
+      end
+    end
+
+    resource :posts do
+      desc 'get post content'
+      params do
+        optional :rank, type: Integer, values: 0..19, default: 0
+        optional :type, type: String, values: %w[recommend author thread]
+        optional :query, type: String
+        optional :page, type: Integer
+        requires :board, type: String
+        optional :random, type: Boolean
+      end
+      route_param :rank do
+        resource :content do
           get do
             params[:rank] = rand(0..19) if params[:random] == true
             PostParser.new.media(params)
